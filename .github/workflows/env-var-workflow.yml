@@ -19,13 +19,13 @@ jobs:
 
       - name: Set var 2
         run: |
-          TARGET_VAR=step2
+          echo "TARGET_VAR=step2" >> $GITHUB_ENV
           echo "Set TARGET_VAR"
           sleep 2
 
       - name: Set var 3
         run: |
-          TARGET_VAR=step3
+          echo "TARGET_VAR=step3" >> $GITHUB_ENV
           echo "Set TARGET_VAR"
           sleep 2
 
