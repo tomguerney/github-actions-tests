@@ -15,7 +15,7 @@ on_change() {
     
     ls -la $ENV_VARS_DIR
     # Zip the entire contents of ENV_VARS_DIR
-    zip -r "$temp_zip" "$ENV_VARS_DIR" > /dev/null 2>&1
+    zip -r "$temp_zip" "$ENV_VARS_DIR"
     ls -la $temp_zip
     
     # Base64 encode the zip and output to console
