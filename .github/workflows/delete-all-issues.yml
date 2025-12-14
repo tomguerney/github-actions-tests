@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Delete all issues
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DELETE_TOKEN }}
         run: |
           # Get all issues (both open and closed)
           ISSUES=$(gh issue list --repo ${{ github.repository }} --state all --json number -q '.[].number')
