@@ -55,25 +55,6 @@ EOF
     ISSUE_NUMBER=$(echo "$response" | grep -o '"number": [0-9]*' | head -1 | grep -o '[0-9]*')
 }
 
-# update_issue() {
-#     local body="$1"
-    
-#     local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}/comments"
-    
-#     local json_data=$(cat <<EOF
-# {
-#     "body": "$body"
-# }
-# EOF
-# )
-    
-#     curl -s -X POST "$api_url" \
-#         -H "Authorization: Bearer $GITHUB_TOKEN" \
-#         -H "Accept: application/vnd.github+json" \
-#         -H "Content-Type: application/json" \
-#         -d "$json_data" > /dev/null
-# }
-
 create_comment() {
     local body="$1"
     
