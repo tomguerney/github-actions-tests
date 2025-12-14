@@ -27,6 +27,7 @@ def main():
 
     while True:
         current_value = get_env_vars_file()
+        print(current_value)
         if current_value != previous_value:
                 on_change(current_value)
                 previous_value = current_value
