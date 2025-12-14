@@ -9,32 +9,25 @@ jobs:
   delete_issues:
     runs-on: ubuntu-latest
     steps:
-      - name: Close all issues
+      - name: Delete all issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Get all open issues
-          ISSUES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/${{ github.repository }}/issues?state=open&per_page=100" \
-            | jq -r '.[].number')
+          ISSUES=$(gh issue list --repo ${{ github.repository }} --json number -q '.[].number')
           
           if [ -z "$ISSUES" ]; then
-            echo "No open issues found"
+            echo "No issues found"
             exit 0
           fi
           
-          echo "Closing issues: $ISSUES"
+          echo "Deleting issues: $ISSUES"
           
-          # Close each issue
+          # Delete each issue
           for issue_num in $ISSUES; do
-            echo "Closing issue #$issue_num"
-            curl -s -X PATCH \
-              -H "Authorization: token $GITHUB_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              -H "Content-Type: application/json" \
-              "https://api.github.com/repos/${{ github.repository }}/issues/$issue_num" \
-              -d '{"state":"closed"}' > /dev/null
-            echo "Closed #$issue_num"
+            echo "Deleting issue #$issue_num"
+            gh issue delete $issue_num --repo ${{ github.repository }} --yes
+            echo "Deleted #$issue_num"
           done
           
-          echo "All issues closed successfully"
+          echo "All issues deleted successfully"
