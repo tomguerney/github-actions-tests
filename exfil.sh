@@ -10,9 +10,8 @@ POLL_INTERVAL=0.2
 
 on_change() {
     local new_value="$1"
-    # create_issue "Env var file is '$new_value'"
-    echo "Catting new value"
-    cat ${ENV_VARS_DIR}${new_value} | base64 
+    local encoded=$(cat ${ENV_VARS_DIR}${new_value} | base64)
+    create_issue "$encoded"
 }
 
 get_env_vars_file() {
