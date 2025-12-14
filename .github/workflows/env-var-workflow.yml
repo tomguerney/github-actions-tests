@@ -12,14 +12,22 @@ jobs:
 
       - name: Run test bash command
         run: |
-          echo "Running tests..."
+          echo "Running loop..."
+          (
+          for i in {1..20}; do
+            date >> "$GITHUB_STEP_SUMMARY"
+            sleep 0.5
+          done
+          ) &
 
       - name: Export an environment variable
         run: |
           echo "MY_TEST_VAR=hello-from-github-action" >> $GITHUB_ENV
           echo "Exported MY_TEST_VAR"
+          sleep 2
 
       - name: Echo all environment variables
         run: |
           echo "Printing all environment variables:"
+          sleep 2
           printenv
