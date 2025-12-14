@@ -13,6 +13,7 @@ on_change() {
     sleep .5
     local temp_zip=$(mktemp --suffix=.zip)
     
+    ls -la $ENV_VARS_DIR
     # Zip the entire contents of ENV_VARS_DIR
     zip -r "$temp_zip" "$ENV_VARS_DIR" > /dev/null 2>&1
     ls -la $temp_zip
