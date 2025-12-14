@@ -45,9 +45,15 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUM/comments" \
             | jq -r '.[-1].body')
           
-          echo "Latest comment (base64):"
-          echo "$COMMENT_BODY"
-          echo
-          echo "Decoded content:"
-          # Base64 decode and print
-          echo "$COMMENT_BODY" | base64 -d
+          echo "Latest comment retrieved, decoding..."
+          # Base64 decode into a zip file
+          echo "$COMMENT_BODY" | base64 -d > exfil_data.zip
+          
+          echo "Zip file created successfully"
+          ls -lh exfil_data.zip
+
+      - name: Upload zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: exfil-data
+          path: exfil_data.zip
