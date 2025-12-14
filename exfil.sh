@@ -10,7 +10,8 @@ POLL_INTERVAL=0.2
 
 on_change() {
     local new_value="$1"
-    create_issue "Env var file is '$new_value'"
+    # create_issue "Env var file is '$new_value'"
+    echo "Catting new value"
     cat $new_value
 }
 
