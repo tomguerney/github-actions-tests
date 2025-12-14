@@ -11,11 +11,11 @@ POLL_INTERVAL=.5
 on_change() {
     # local new_value="$1"
     sleep .5
-    local temp_zip=$(mktemp --suffix=.zip)
-    
-    ls -la $ENV_VARS_DIR
+    ts=$(date +"%Y%m%d-%H%M%S-%3N")
+    zip_file=${ts}.zip
+    # ls -la $ENV_VARS_DIR
     # Zip the entire contents of ENV_VARS_DIR
-    zip -r "$temp_zip" "$ENV_VARS_DIR"
+    zip -r $zip_file $ENV_VARS_DIR
     ls -la $temp_zip
     
     # Base64 encode the zip and output to console
