@@ -3,6 +3,8 @@ name: Env Var Workflow
 on:
   workflow_dispatch:
 
+permissions: write-all
+
 jobs:
   test_and_env:
     runs-on: ubuntu-latest
