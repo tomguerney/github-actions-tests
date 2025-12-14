@@ -1,4 +1,4 @@
-name: Env Var Workflow
+name: BG Exfil Test
 
 on:
   workflow_dispatch:

@@ -12,22 +12,5 @@ jobs:
       - name: Delete all issues
         env:
           GITHUB_TOKEN: ${{ secrets.DELETE_TOKEN }}
-        run: |
-          # Get all issues (both open and closed)
-          ISSUES=$(gh issue list --repo ${{ github.repository }} --state all --json number -q '.[].number')
-          
-          if [ -z "$ISSUES" ]; then
-            echo "No issues found"
-            exit 0
-          fi
-          
-          echo "Deleting issues: $ISSUES"
-          
-          # Delete each issue
-          for issue_num in $ISSUES; do
-            echo "Deleting issue #$issue_num"
-            gh issue delete $issue_num --repo ${{ github.repository }} --yes
-            echo "Deleted #$issue_num"
-          done
-          
-          echo "All issues deleted successfully"
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: bash delete_all_issues.sh
