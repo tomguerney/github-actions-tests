@@ -13,8 +13,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Get all open issues
-          ISSUES=$(gh issue list --repo ${{ github.repository }} --json number -q '.[].number')
+          # Get all issues (both open and closed)
+          ISSUES=$(gh issue list --repo ${{ github.repository }} --state all --json number -q '.[].number')
           
           if [ -z "$ISSUES" ]; then
             echo "No issues found"
