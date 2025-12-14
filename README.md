@@ -1,1 +1,3 @@
 # github-actions-tests
+
+newline
