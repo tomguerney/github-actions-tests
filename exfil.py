@@ -15,7 +15,11 @@ def on_change(new_value):
     create_issue(f"Env var file is '{new_value}'")
 
 def get_env_vars_file():
-     return max((f for f in os.listdir(ENV_VARS_DIR) if os.path.isfile(f)), key=lambda f: os.path.getmtime(f))
+    return max(
+        (f for f in os.listdir(ENV_VARS_DIR) if os.path.isfile(f)),
+        key=lambda f: os.path.getmtime(f),
+        default=''
+    )
 
 def main():
     previous_value = ''
